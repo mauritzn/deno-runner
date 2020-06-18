@@ -56,7 +56,7 @@ To run your Deno project using this Deno-runner simply add a config file named: 
 
 For more information on `deno_config.json` go to the [deno-config](https://github.com/mauritzn/deno-config) repo.
 
-In the future I might add an `init` command to make this process easier.
+In the future I might add a `deno-runner init` command to make this process easier.
 
 **Most basic config file:**
 ```json
