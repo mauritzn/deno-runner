@@ -71,7 +71,7 @@ In the future I might add a `deno-runner init` command to make this process easi
 
 The Deno config file used by Deno-runner is a JSON file named `deno_config.json`, this structure of this file is laid out in the [deno-config](https://github.com/mauritzn/deno-config) repo.
 
-Currently Deno-runner only uses 2 properties from the config file, `main` and `permissions`. In the future I plan to support more options.
+Currently Deno-runner only uses 4 properties from the config file, `main`, `unstableFlag`, `permissions` and `imports`. In the future I plan to support more options.
 
 **Example config file:**
 ```json
@@ -81,6 +81,7 @@ Currently Deno-runner only uses 2 properties from the config file, `main` and `p
   "version": "1.0.0",
   "author": "Mauritz N",
   "main": "server.ts",
+  "unstableFlag": false,
   "permissions": [
     "allow-net=mauritzonline.com",
     "allow-read"
@@ -90,3 +91,10 @@ Currently Deno-runner only uses 2 properties from the config file, `main` and `p
   }
 }
 ```
+
+### Imports
+
+Currently using import maps in Deno is an unstable feature, which means your project will get the `unstableFlag` property if you use them. Due to the feature being unstable some editors language servers won't be able to handle the import properly, your project will run fine, but your editor might complain about syntax errors. To hopefully mitigate this somewhat Deno-runner currently writes `import_map.json` to the project folder, so that when editors update their language servers it should find the import maps and fix any syntax issues.
+
+You can find more information about import maps in Deno's manual:
+https://deno.land/manual/linking_to_external_code/import_maps
