@@ -17,14 +17,14 @@ Due to how `deno install` works the deno-runner folder should not be moved after
 An installation script is provided but if you want to do it manually or change the name that it installs under use the following command:
 
 ```bash
-deno install --allow-read --allow-run -n deno-runner ./src/index.ts
+deno install --allow-read --allow-write --allow-run -n deno-runner ./src/index.ts
 ```
 
 If you want to run Deno-runner without installing you can use a simple run script. The script should use an absolute path to Deno-runner. `$@` is used to pass any provided arguments to Deno-runner. `$HOME` can also be used like in the example below:
 
 ```bash
 #!/bin/bash
-deno run --allow-read --allow-run "$HOME/deno-runner/src/index.ts" "$@"
+deno run --allow-read --allow-write --allow-run "$HOME/deno-runner/src/index.ts" "$@"
 ```
 
 -----
