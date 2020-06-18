@@ -38,7 +38,7 @@ const watchFsEvents = [
 ];
 
 class DenoRunner {
-  readonly version = "0.0.1";
+  readonly version = "0.0.2";
   readonly configFile = `deno_config.json`;
   readonly importMapFile = `import_map.json`;
 
