@@ -1,6 +1,6 @@
 {
-  "name": "multi_file_testing",
-  "description": "Simple test of multiple file use in Deno.",
+  "name": "stdin_testing",
+  "description": "Simple test of getting input from the user in Deno.",
   "version": "1.0.0",
   "author": "Mauritz N",
   "main": "./src/index.ts",
