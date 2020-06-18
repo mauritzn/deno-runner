@@ -3,6 +3,7 @@ import { existsSync, colorLog, logError } from "./utils.ts";
 interface Project {
   folderPath: string;
   configPath: string;
+  importMapPath: string;
   mainFilePath: string;
   runCommand: string[];
   config: ProjectConfig;
@@ -13,9 +14,10 @@ interface ProjectConfig {
   version?: string;
   author?: string;
   main: string;
+  unstableFlag: boolean;
   permissions: string[];
   imports?: ImportMap;
-  [key: string]: string | string[] | ImportMap | undefined;
+  [key: string]: string | string[] | boolean | ImportMap | undefined;
 }
 interface ImportMap {
   [key: string]: string;
@@ -43,21 +45,26 @@ class DenoRunner {
   private runOptions = {
     watchMode: false,
     imports: false,
+    unstableFlag: false,
   };
   argsToPass: string[] = [];
 
   project: Project = {
     folderPath: "",
     configPath: "",
+    importMapPath: "",
     mainFilePath: "",
     runCommand: [],
+
     config: {
       name: undefined,
       description: undefined,
       version: undefined,
       author: undefined,
       main: "",
+      unstableFlag: false,
       permissions: [],
+      imports: {},
     },
   };
   denoProcess: Deno.Process | undefined;
@@ -66,9 +73,33 @@ class DenoRunner {
     if (this.parseArgs(args)) {
       this.project.folderPath = Deno.cwd();
       this.project.configPath = `${this.project.folderPath}/${this.configFile}`;
+      this.project.importMapPath =
+        `${this.project.folderPath}/${this.importMapFile}`;
 
       if (existsSync(this.project.configPath)) {
         if (this.parseConfigFile()) {
+          if (this.runOptions.imports) {
+            colorLog(
+              [
+                "Info:",
+                "This project will run using Deno import maps (with --unstable flag)",
+              ],
+              "cyan",
+            );
+          }
+          if (this.runOptions.unstableFlag) {
+            colorLog(
+              [
+                "Warning:",
+                "This project will run using the Deno --unstable flag",
+              ],
+              "yellow",
+            );
+          }
+          if (this.runOptions.imports || this.runOptions.unstableFlag) {
+            console.log("");
+          }
+
           this.permissionRequest().then(() => {
             const permissionString = this.project.config.permissions.map((
               permission,
@@ -77,6 +108,28 @@ class DenoRunner {
             this.project.runCommand = ["deno", "run"];
             if (permissionString.length > 0) {
               this.project.runCommand.push(permissionString);
+            }
+
+            if (this.runOptions.imports) {
+              let importMapObj = {
+                imports: (this.project.config.imports
+                  ? this.project.config.imports
+                  : {}),
+              };
+
+              Deno.writeTextFileSync(
+                this.project.importMapPath,
+                JSON.stringify(importMapObj),
+              );
+              // https://deno.land/manual/linking_to_external_code/import_maps
+              this.project.runCommand.push(
+                `--importmap=${this.project.importMapPath}`,
+              );
+              this.runOptions.unstableFlag = true;
+            }
+
+            if (this.runOptions.unstableFlag) {
+              this.project.runCommand.push("--unstable");
             }
             this.project.runCommand.push(this.project.mainFilePath);
 
@@ -224,6 +277,12 @@ class DenoRunner {
 
                 case "imports":
                   this.runOptions.imports = true;
+                  break;
+
+                case "unstableFlag":
+                  if (this.project.config[key] === true) {
+                    this.runOptions.unstableFlag = true;
+                  }
                   break;
               }
             }
