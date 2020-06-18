@@ -1,0 +1,13 @@
+{
+  "name": "denotrain_testing",
+  "description": "Simple test of denotrain",
+  "version": "1.0.0",
+  "author": "Mauritz N",
+  "main": "server.ts",
+  "permissions": [
+    "allow-net"
+  ],
+  "imports": {
+    "denotrain": "https://deno.land/x/denotrain@v0.4.0/mod.ts"
+  }
+}
