@@ -79,11 +79,11 @@ Currently Deno-runner only uses 4 properties from the config file, `main`, `unst
   "name": "simple_demo",
   "description": "Simple demo for config file",
   "version": "1.0.0",
-  "author": "Mauritz N",
+  "author": "John Doe",
   "main": "server.ts",
   "unstableFlag": false,
   "permissions": [
-    "allow-net=mauritzonline.com",
+    "allow-net=github.com",
     "allow-read"
   ],
   "imports": {
