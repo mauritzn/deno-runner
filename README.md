@@ -8,6 +8,14 @@ Simple Deno runner to make running larger projects easier. Built using Deno *(Ty
 
 -----
 
+## Permissions used by Deno-runner
+
+  - **allow-read:** Required to read `deno_config.json`.
+  - **allow-write:** Required to write `import_map.json`.
+  - **allow-run:** Required to use `deno run`.
+
+-----
+
 ## Installing / Running Deno-runner
 
 Deno-runner runs best after being installed using Deno. Deno-runner can be run without installing, but will require you to either create an alias or your own execution script.
