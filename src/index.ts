@@ -1,46 +1,24 @@
 import { existsSync, colorLog, logError } from "./utils.ts";
-
-interface Project {
-  folderPath: string;
-  configPath: string;
-  importMapPath: string;
-  mainFilePath: string;
-  runCommand: string[];
-  config: ProjectConfig;
-}
-interface ProjectConfig {
-  name?: string;
-  description?: string;
-  version?: string;
-  author?: string;
-  main: string;
-  unstableFlag: boolean;
-  permissions: string[];
-  imports?: ImportMap;
-  [key: string]: string | string[] | boolean | ImportMap | undefined;
-}
-interface ImportMap {
-  [key: string]: string;
-}
-
-const validPermissions: string[] = [
-  "allow-env",
-  "allow-hrtime",
-  "allow-net",
-  "allow-read",
-  "allow-run",
-  "allow-write",
-];
-const watchFsEvents = [
-  "create",
-  "modify",
-  "remove",
-];
+import { Project, ProjectConfig } from "./interfaces.ts";
 
 class DenoRunner {
   readonly version = "0.0.2";
   readonly configFile = `deno_config.json`;
   readonly importMapFile = `import_map.json`;
+
+  readonly validPermissions: string[] = [
+    "allow-env",
+    "allow-hrtime",
+    "allow-net",
+    "allow-read",
+    "allow-run",
+    "allow-write",
+  ];
+  readonly watchFsEvents = [
+    "create",
+    "modify",
+    "remove",
+  ];
 
   private runOptions = {
     watchMode: false,
@@ -170,7 +148,7 @@ class DenoRunner {
     for await (const event of watcher) {
       const currentEvent = Date.now();
       if (
-        watchFsEvents.includes(event.kind) &&
+        this.watchFsEvents.includes(event.kind) &&
         (currentEvent - lastEvent > 100)
       ) {
         lastEvent = currentEvent;
@@ -254,7 +232,7 @@ class DenoRunner {
                       (permission) => {
                         const splitPermission = permission.split("=");
                         if (splitPermission.length <= 2) {
-                          const valid = validPermissions.includes(
+                          const valid = this.validPermissions.includes(
                             splitPermission[0].toLowerCase(),
                           );
                           if (valid) return true;
