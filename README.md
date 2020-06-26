@@ -109,7 +109,7 @@ You may have to re-open your project in your editor for it to detect changes to 
 
 #### VS Code
 
-In VS Code import maps can be used with out syntax errors using the following VS Code extension: https://github.com/denoland/vscode_deno. This also requires the use of a `tsconfig.json` file, to specify where the import map file is.
+In VS Code import maps can be used without syntax errors using the following VS Code extension: https://github.com/denoland/vscode_deno. This also requires the use of a `tsconfig.json` file, to specify where the import map file is.
 
 One thing to remember is that you need to run the project once using Deno-runner in-order for it to create the `import_map.json` file for you. Any update to the `"imports"` config option will also require that you run Deno-runner for the `import_map.json` file to get updated. This is because Deno-runner only updates the `import_map.json` file before running your project.
 
