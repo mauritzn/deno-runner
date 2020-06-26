@@ -104,5 +104,29 @@ Currently Deno-runner only uses 4 properties from the config file, `main`, `unst
 
 Currently using import maps in Deno is an unstable feature, which means your project will get the `unstableFlag` property if you use them. Due to the feature being unstable some editors language servers won't be able to handle the import properly, your project will run fine, but your editor might complain about syntax errors. To hopefully mitigate this somewhat Deno-runner currently writes `import_map.json` to the project folder, so that when editors update their language servers it should find the import maps and fix any syntax issues.
 
+You may have to re-open your project in your editor for it to detect changes to `import_map.json`.
+
+
+#### VS Code
+
+In VS Code import maps can be used with out syntax errors using the following VS Code extension: https://github.com/denoland/vscode_deno. This also requires the use of a `tsconfig.json` file, to specify where the import map file is.
+
+One thing to remember is that you need to run the project once using Deno-runner in-order for it to create the `import_map.json` file for you. Any update to the `"imports"` config option will also require that you run Deno-runner for the `import_map.json` file to get updated. This is because Deno-runner only updates the `import_map.json` file before running your project.
+
+**Example tsconfig.json for VS Code**
+```json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "typescript-deno-plugin",
+        "enable": true,
+        "importmap": "import_map.json"
+      }
+    ]
+  }
+}
+```
+
 You can find more information about import maps in Deno's manual:
 https://deno.land/manual/linking_to_external_code/import_maps
