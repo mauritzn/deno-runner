@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "plugins": [
+      { // https://github.com/denoland/vscode_deno
+        "name": "typescript-deno-plugin",
+        "enable": true,
+        "importmap": "import_map.json"
+      }
+    ]
+  }
+}
